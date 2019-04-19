@@ -1,0 +1,50 @@
+@model Dashboard_wrapper
+<h1 style="display:inline-block;">Dojo Activity Center</h1>
+<p style="display:inline-block;margin-left:200px"> Welcome, @Model.User.Name !</p>
+<a href="/logout" style="margin-left:40px;">Logout</a>
+<hr>
+<center>
+        <table class="table table-striped col-sm-10 border">
+
+            <thead>
+                <tr>
+                    <th class='border-left border-right' scope="col-2">Activity</th>
+                    <th class='border-left border-right' scope="col-1">Date and Time</th>
+                    <th class='border-left border-right' scope="col-1">Duration</th>
+                    <th class='border-left border-right' scope="col-1">Event Coordinator</th>
+                    <th class='border-left border-right' scope="col-1">No. of Participants</th>
+                    <th class='border-left border-right' scope="col-1">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+              @foreach(var x in @Model.AllPlan){
+
+                    <tr>   
+                        <td class='border-left border-right'>
+                            <a href="/activity/@x.PlanId">@x.Title</a>
+                        </td>
+                        <td class='border-left border-right'>@x.Date @@ @x.Time</td>
+                        <td class='border-left border-right'>@x.Duration</td> 
+                        <td class='border-left border-right'>@x.Creator.Name</td> 
+                        <td class='border-left border-right'>@x.Guests.Count</td> 
+                
+                        <td class='border-left border-right'>
+                        @if(x.UserId==@Model.User.UserId){
+                                <a href="/delete/@x.PlanId">Delete</a>
+                        }else{
+                            @if(x.Guests.Any(r=>r.UserId==@Model.User.UserId)){
+                                    <a href="/un-rsvp/@x.PlanId">Leave</a>
+                            }else{
+                                    <a href="/rsvp/@x.PlanId">Join</a>
+                            }
+                        }
+                        </td> 
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </center>
+    <button><a href="/new">Add New Activity</a></button>

@@ -1,0 +1,34 @@
+@model Display_one_plan
+
+<h1 style="display:inline-block;">Dojo Activity Center</h1>
+<a href="/home" style="margin-left:40px;">Home</a>
+<a href="/logout" style="margin-left:40px;">Logout</a>
+<hr>
+
+<h1>@Model.Oneplan.Title</h1>
+<br>
+<p>Event Coordinator: @Model.Oneplan.Creator.Name</p>
+<p>Description: @Model.Oneplan.Description </p>
+<br>
+<p>Participants:</p>
+<div class="offset-sm-1">
+    @{
+        foreach(var x in @Model.Guest)
+        {
+            <p>@x.User.Name</p>
+        }
+    }
+</div>
+
+
+@if(@Model.Oneplan.Creator.UserId==@Model.Userid){
+    <a href="/activity/@Model.Oneplan.PlanId">Delete</a>
+}else{
+    @if(@Model.Oneplan.Guests.Any(r=>r.UserId==@Model.Userid)){
+        <a href="/un-rsvp/@Model.Oneplan.PlanId">Leave</a>
+    }else{
+        <a href="/rsvp/@Model.Oneplan.PlanId">Join</a>
+    }
+}
+
+  
